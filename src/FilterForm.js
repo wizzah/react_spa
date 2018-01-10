@@ -18,7 +18,7 @@ export default class FilterForm extends React.Component {
       }
       const year = this.props.json[i].year;
       if(!years.has(year)) {
-        years.add(parseInt(year));
+        years.add(parseInt(year, 10));
       }
       const color = this.props.json[i].color;
       if(!colors.has(color)) {
@@ -59,7 +59,7 @@ export default class FilterForm extends React.Component {
     const { filter_form_state } = this.state;
     filter_form_state[name] = value;
     if(name === "year") {
-      filter_form_state[name] = parseInt(value)
+      filter_form_state[name] = parseInt(value, 10)
     }
 
     // filter here
