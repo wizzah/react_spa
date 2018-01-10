@@ -6,11 +6,39 @@ export default class FilterForm extends React.Component {
   constructor(props) {
     super(props);
 
+    let makes = new Set();
+    let years = new Set();
+    let colors = new Set();
+
+    for(let i = 0; i < this.props.json.length; i++) {
+
+      const make = this.props.json[i].make;
+      if(!makes.has(make)) {
+        makes.add(make);
+      }
+      const year = this.props.json[i].year;
+      if(!years.has(year)) {
+        years.add(parseInt(year));
+      }
+      const color = this.props.json[i].color;
+      if(!colors.has(color)) {
+        colors.add(color);
+      }
+    }
+
+    makes = Array.from(makes);
+    years = Array.from(years).sort();
+    colors = Array.from(colors);
+
     this.state = {
       cars: props.json,
+      makes: makes,
+      years: years,
+      colors: colors,
       filter_form_state: {
         color: '',
         make: '',
+        year: 0,
         hasSunroof: true,
         isFourWheelDrive: true,
         hasPowerWindows: true,
@@ -30,27 +58,53 @@ export default class FilterForm extends React.Component {
 
     const { filter_form_state } = this.state;
     filter_form_state[name] = value;
+    if(name == "year") {
+      filter_form_state[name] = parseInt(value)
+    }
 
     // filter here
 
     let filteredCars = [];
     const filterProperties = Object.keys(filter_form_state);
 
-    // check exact match. This is for false:
-    for(let i = 0; i < this.props.json.length; i++) {
-      const car = this.props.json[i];
-      // compare keys in every car
-      for(let j = 0; j < filterProperties.length; j++) {
-        const prop = filterProperties[j];
-        if(typeof(filter_form_state[prop]) == "boolean") {
-          if(filter_form_state[prop] == true && car[prop] == true) {
-            filteredCars.push(car);
-            break
+    // check exact match
+    if(this.state.filter_form_state.exactMatch) {
+
+      for(let i = 0; i < this.props.json.length; i++) {
+        const car = this.props.json[i];
+        // compare keys in every car
+        let add = true;
+        for(let j = 0; j < filterProperties.length; j++) {
+          const prop = filterProperties[j];
+          if(car[prop]) {
+            if(filter_form_state[prop] != car[prop]) {
+              add = false;
+              break
+            }
           }
-        } else if(typeof(filter_form_state[prop]) == "string") {
-          if(filter_form_state[prop] == car[prop]) {
-            filteredCars.push(car);
-            break
+        }
+        if(add) {
+          filteredCars.push(car);
+        }
+      }
+
+    } else {
+
+      for(let i = 0; i < this.props.json.length; i++) {
+        const car = this.props.json[i];
+        // compare keys in every car
+        for(let j = 0; j < filterProperties.length; j++) {
+          const prop = filterProperties[j];
+          if(typeof(filter_form_state[prop]) == "boolean") {
+            if(filter_form_state[prop] == true && car[prop] == true) {
+              filteredCars.push(car);
+              break
+            }
+          } else if(typeof(filter_form_state[prop]) == "string") {
+            if(filter_form_state[prop] == car[prop]) {
+              filteredCars.push(car);
+              break
+            }
           }
         }
       }
@@ -65,23 +119,8 @@ export default class FilterForm extends React.Component {
   }
 
   render() {
-    // move this into the constructor and make sets for the actual values, like "Toyota, Mercedes" etc
-    // then build the tags in the html down there
-    console.log(this.props.json);
-    let makes = new Set();
-    let years = new Set();
-    let colors = new Set();
-    for(let i = 0; i < this.props.json.length; i++) {
-      const make = this.props.json[i].make;
-      const potentialOption = <option key={i} value={make}>{make}</option>;
-      if(!makes.has(potentialOption)) {
-        makes.add(
-          <option key={i} value={make}>{make}</option>
-        );
-      }
-    }
+
     return (
-      <div className="container">
         <form>
           <label>
             Show only exact matches: 
@@ -121,15 +160,17 @@ export default class FilterForm extends React.Component {
           <label>Make:
             <select name="make" value={this.state.filter_form_state.make} onChange={this.handleChange}>
               <option value="{this.state.filter_form_state.make}">Select a Make</option>
-              {this.makes}
+              {this.state.makes.map(make =>
+                <option key={make} value={make}>{make}</option>
+              )}
             </select>
           </label>
           <br />
           <label>Year:
             <select name="year" value={this.state.filter_form_state.year} onChange={this.handleChange}>
               <option value="{this.state.filter_form_state.year}">Select a year</option>
-              {this.props.json.map(result =>
-                <option key={result.id} value={result.year}>{result.year}</option>
+              {this.state.years.map(year =>
+                <option key={year} value={year}>{year}</option>
               )}
             </select>
           </label>
@@ -137,15 +178,14 @@ export default class FilterForm extends React.Component {
           <label>Color:
             <select value={this.state.filter_form_state.color} name="color" onChange={this.handleChange}>
               <option value="{this.state.filter_form_state.color}">Select a color</option>
-              {this.props.json.map(result =>
-                <option key={result.id} value={result.color}>{result.color}</option>
+              {this.state.colors.map(color =>
+                <option key={color} value={color}>{color}</option>
               )}
             </select>
           </label>
           <br />
           <Display results={this.state.cars} />
         </form>
-      </div>
     );
   }
 }
