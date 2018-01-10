@@ -58,7 +58,7 @@ export default class FilterForm extends React.Component {
 
     const { filter_form_state } = this.state;
     filter_form_state[name] = value;
-    if(name == "year") {
+    if(name === "year") {
       filter_form_state[name] = parseInt(value)
     }
 
@@ -77,7 +77,7 @@ export default class FilterForm extends React.Component {
         for(let j = 0; j < filterProperties.length; j++) {
           const prop = filterProperties[j];
           if(car[prop]) {
-            if(filter_form_state[prop] != car[prop]) {
+            if(filter_form_state[prop] !== car[prop]) {
               add = false;
               break
             }
@@ -95,13 +95,13 @@ export default class FilterForm extends React.Component {
         // compare keys in every car
         for(let j = 0; j < filterProperties.length; j++) {
           const prop = filterProperties[j];
-          if(typeof(filter_form_state[prop]) == "boolean") {
-            if(filter_form_state[prop] == true && car[prop] == true) {
+          if(typeof(filter_form_state[prop]) === "boolean") {
+            if(filter_form_state[prop] === true && car[prop] === true) {
               filteredCars.push(car);
               break
             }
-          } else if(typeof(filter_form_state[prop]) == "string") {
-            if(filter_form_state[prop] == car[prop]) {
+          } else if(typeof(filter_form_state[prop]) === "string") {
+            if(filter_form_state[prop] === car[prop]) {
               filteredCars.push(car);
               break
             }
@@ -121,71 +121,68 @@ export default class FilterForm extends React.Component {
   render() {
 
     return (
+      <div>
         <form>
-          <label>
-            Show only exact matches: 
-            <input type="checkbox" checked={this.state.filter_form_state.exactMatch} name="exactMatch" value="exactMatch" onChange={this.handleChange} />
-          </label>
-          <br />
-          <label>
-            4 Wheel Drive: 
-            <input type="checkbox" checked={this.state.filter_form_state.isFourWheelDrive} name="isFourWheelDrive" value="isFourWheelDrive" onChange={this.handleChange} />
-          </label>
-          <br />
-          <label>
-            Sun roof: 
-            <input type="checkbox" checked={this.state.filter_form_state.hasSunroof} name="hasSunroof" value="hasSunroof" onChange={this.handleChange} />
-          </label>
-          <br />
-          <label>
-            Has power windows:
-            <input type="checkbox" checked={this.state.filter_form_state.hasPowerWindows} name="hasPowerWindows" value="hasPowerWindows" onChange={this.handleChange} />
-          </label>
-          <br />
-          <label>
-            Heated seats: 
-            <input type="checkbox" checked={this.state.filter_form_state.hasHeatedSeats} name="hasHeatedSeats" value="hasHeatedSeats" onChange={this.handleChange} />
-          </label>
-          <br />
-          <label>
-            Low miles:
-            <input type="checkbox" checked={this.state.filter_form_state.hasLowMiles} name="hasLowMiles" value="hasLowMiles" onChange={this.handleChange} />
-          </label>
-          <br />
-          <label>
-            Navigation:
-            <input type="checkbox" checked={this.state.filter_form_state.hasNavigation} name="hasNavigation" value="hasNavigation" onChange={this.handleChange} />
-          </label>
-          <br />
-          <label>Make:
-            <select name="make" value={this.state.filter_form_state.make} onChange={this.handleChange}>
-              <option value="{this.state.filter_form_state.make}">Select a Make</option>
-              {this.state.makes.map(make =>
-                <option key={make} value={make}>{make}</option>
-              )}
-            </select>
-          </label>
-          <br />
-          <label>Year:
-            <select name="year" value={this.state.filter_form_state.year} onChange={this.handleChange}>
-              <option value="{this.state.filter_form_state.year}">Select a year</option>
-              {this.state.years.map(year =>
-                <option key={year} value={year}>{year}</option>
-              )}
-            </select>
-          </label>
-          <br />
-          <label>Color:
-            <select value={this.state.filter_form_state.color} name="color" onChange={this.handleChange}>
-              <option value="{this.state.filter_form_state.color}">Select a color</option>
-              {this.state.colors.map(color =>
-                <option key={color} value={color}>{color}</option>
-              )}
-            </select>
-          </label>
-          <br />
-          <Display results={this.state.cars} />
+          <fieldset>
+            <label>
+              Show only exact matches: 
+              <input type="checkbox" checked={this.state.filter_form_state.exactMatch} name="exactMatch" value="exactMatch" onChange={this.handleChange} />
+            </label>
+            <br />
+            <label>
+              4 Wheel Drive: 
+              <input type="checkbox" checked={this.state.filter_form_state.isFourWheelDrive} name="isFourWheelDrive" value="isFourWheelDrive" onChange={this.handleChange} />
+            </label>
+            <label>
+              Sun roof: 
+              <input type="checkbox" checked={this.state.filter_form_state.hasSunroof} name="hasSunroof" value="hasSunroof" onChange={this.handleChange} />
+            </label>
+            <label>
+              Has power windows:
+              <input type="checkbox" checked={this.state.filter_form_state.hasPowerWindows} name="hasPowerWindows" value="hasPowerWindows" onChange={this.handleChange} />
+            </label>
+            <br />
+            <label>
+              Heated seats: 
+              <input type="checkbox" checked={this.state.filter_form_state.hasHeatedSeats} name="hasHeatedSeats" value="hasHeatedSeats" onChange={this.handleChange} />
+            </label>
+            <label>
+              Low miles:
+              <input type="checkbox" checked={this.state.filter_form_state.hasLowMiles} name="hasLowMiles" value="hasLowMiles" onChange={this.handleChange} />
+            </label>
+            <label>
+              Navigation:
+              <input type="checkbox" checked={this.state.filter_form_state.hasNavigation} name="hasNavigation" value="hasNavigation" onChange={this.handleChange} />
+            </label>
+            <br />
+            <label>Make:
+              <select name="make" value={this.state.filter_form_state.make} onChange={this.handleChange}>
+                <option value="{this.state.filter_form_state.make}">Select a Make</option>
+                {this.state.makes.map(make =>
+                  <option key={make} value={make}>{make}</option>
+                )}
+              </select>
+            </label>
+            <label>Year:
+              <select name="year" value={this.state.filter_form_state.year} onChange={this.handleChange}>
+                <option value="{this.state.filter_form_state.year}">Select a year</option>
+                {this.state.years.map(year =>
+                  <option key={year} value={year}>{year}</option>
+                )}
+              </select>
+            </label>
+            <label>Color:
+              <select value={this.state.filter_form_state.color} name="color" onChange={this.handleChange}>
+                <option value="{this.state.filter_form_state.color}">Select a color</option>
+                {this.state.colors.map(color =>
+                  <option key={color} value={color}>{color}</option>
+                )}
+              </select>
+            </label>
+          </fieldset>
         </form>
+        <Display results={this.state.cars} />
+      </div>
     );
   }
 }

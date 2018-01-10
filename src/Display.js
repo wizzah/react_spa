@@ -7,7 +7,7 @@ export default class Display extends React.Component {
 
     render() {
         return(
-            <table className="table">
+            <table className="table table-striped">
                 <thead>
                     <tr>
                         <th>Make</th>
@@ -16,6 +16,8 @@ export default class Display extends React.Component {
                         <th>Color</th>
                         <th>Extras</th>
                     </tr>
+                </thead>
+                <tbody>
                     {this.props.results.map(car =>
                         <tr key={car._id}>
                             <td>{car.make}</td>
@@ -23,16 +25,16 @@ export default class Display extends React.Component {
                             <td>{car.price}</td>
                             <td>{car.color}</td>
                             <td>
-                                4 Wheel Drive: {car.isFourWheelDrive.toString()}<br />
-                                Sunroof: {car.hasSunroof.toString()}<br />
-                                Power windows: {car.hasPowerWindows.toString()}<br />
-                                Heated seats: {car.hasHeatedSeats.toString()}<br />
-                                Low miles: {car.hasLowMiles.toString()}<br />
-                                Navigation: {car.hasNavigation.toString()} <br />
+                                {car.isFourWheelDrive ? (<p>4 wheel drive</p>) : (<span></span>)}
+                                {car.hasSunroof ? (<p>Sunroof</p>) : (<span></span>)}
+                                {car.hasPowerWindows ? (<p>Power Windows</p>) : (<span></span>)}
+                                {car.hasHeatedSeats ? (<p>Heated Seats</p>) : (<span></span>)}
+                                {car.hasLowMiles ? (<p>Low Miles</p>) : (<span></span>)}
+                                {car.hasNavigation ? (<p>Navigation System</p>) : (<span></span>)}
                             </td>
                         </tr>
                     )}
-                </thead>
+                </tbody>
             </table>
         );
     }
