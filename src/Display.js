@@ -10,7 +10,6 @@ export default class Display extends React.Component {
 
     render() {
         return(
-            <div>
             <table className="table">
                 <thead>
                     <tr>
@@ -31,7 +30,6 @@ export default class Display extends React.Component {
                     )}
                 </thead>
             </table>
-            </div>
         );
     }
 }
